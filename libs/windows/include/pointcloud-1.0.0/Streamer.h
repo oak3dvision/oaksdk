@@ -31,7 +31,8 @@ protected:
   TimeStampType _currentTimeStamp = 0;
   
   bool _isRunning = false;
-  
+  int  _measureCalibMode = 0;
+  bool _isRawDataProvidedOnly = false;
   virtual bool _start() = 0;
   virtual bool _capture(RawDataFramePtr &p) = 0;
   virtual bool _stop() = 0;
@@ -49,9 +50,18 @@ public:
   virtual bool stop();
   
   virtual bool getSupportedVideoModes(Vector<VideoMode> &videoModes) = 0;
-  
   virtual bool getCurrentVideoMode(VideoMode &videoMode) = 0;
   virtual bool setVideoMode(const VideoMode &videoMode) = 0;
+  virtual bool setMeasureMode(const int measureMode)
+    {
+        _measureCalibMode = measureMode;
+        return true;
+    };
+   bool setRawDataProvidedOnly(const int RawDataOnly)
+    {
+        _isRawDataProvidedOnly = RawDataOnly;
+        return true;
+    };
 };
 /**
  * @}

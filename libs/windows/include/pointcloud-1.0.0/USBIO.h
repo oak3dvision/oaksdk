@@ -13,13 +13,24 @@
 
 namespace PointCloud
 {
-  
+class DataCallback
+{
+public:
+    /**
+     * Callback that new data has arrived.
+     * @param buffer Buffer with new data.
+     * @param n Size of the new data.
+     */
+    unsigned char* buffer_ptr = 0;
+    size_t transfer_size = 0;
+    virtual void onDataReceived(unsigned char *buffer, size_t n) = 0;
+};
+
 class POINTCLOUD_EXPORT USBIO
 {
 protected:
   class USBIOPrivate;
   Ptr<USBIOPrivate> _usbIOPrivate;
-  
 public:
   USBIO(DevicePtr device);
   
@@ -45,6 +56,7 @@ public:
     RECIPIENT_OTHER = 0x03,
   };
   
+  
   bool controlTransfer(Direction direction, RequestType requestType, RecipientType recipientType, uint8_t request, uint16_t value, uint16_t index, 
                        uint8_t *data, uint16_t &length, bool needFullLength = true, long timeout = 1000);
   
@@ -53,9 +65,11 @@ public:
   bool resetBulkEndPoint(uint8_t endpoint);
   
   USBSystem &getUSBSystem();
-  
+  void setCallback(uint8_t endpoint,DataCallback *callback);
+
   bool isInitialized();
-  
+  void close();
+    
   virtual ~USBIO() {}
 };
 
