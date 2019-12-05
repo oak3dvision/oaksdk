@@ -210,7 +210,7 @@ public:
   bool remove(const String &section, const String &name);
   bool removeSection(const String &section);
   
-  virtual bool getConfigSet(const String &section, const ConfigSet *&configSet, bool includeParent = true) const;
+  virtual bool getConfigSet(const String &section,  ConfigSet *&configSet, bool includeParent = true) ;
   
   virtual bool read(const String &configFile);
   virtual bool read(InputStream &in);
@@ -327,6 +327,7 @@ struct CalibrationInformation
 class POINTCLOUD_EXPORT MainConfigurationFile: public ConfigurationFile
 {
 protected:
+  Version _version;
   Map<int, ConfigurationFile> _cameraProfiles;
   Map<int, String> _cameraProfileNames;
   int _defaultCameraProfileID, _defaultCameraProfileIDInHardware;
@@ -356,6 +357,10 @@ public:
     _defaultCameraProfileID(-1),_defaultCameraProfileIDInHardware(-1),_currentCameraProfile(nullptr), _mainConfigName(name),_hardwareID(hardwareID), _hardwareSerializer(hardwareSerializer),
   _quantizationFactor(quantizationFactor)
   {
+      
+      _version.major = 1;
+      _version.minor = 0;
+      TimeStampType timestamp = 0;
     if(!_hardwareSerializer)
       _hardwareSerializer = HardwareSerializerPtr(new HardwareSerializer());
   }
@@ -363,7 +368,7 @@ public:
   void setSerializationQuantizationFactor(int quantizationFactor) { _quantizationFactor = quantizationFactor; }
   
   virtual bool read(const String &configFile);
-  
+    Version getVersion(){ return _version;};
   bool readFromHardware();
   bool ValidateBinFromEEPROM(String serialID = "");
   bool writeSerialToEEPROM(String serialID = "");

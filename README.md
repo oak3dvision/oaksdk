@@ -44,13 +44,12 @@ The ROS wrapper support ROS Indigo, on **Ubuntu 14.04**, and ROS Kinetic, on **U
 
 ## Wiki
 
-Learn more to use sdk at our [wiki](https://github.com/oak3dvision/oaksdk/wiki).
+Learn more to use libPointCloud at our [wiki](https://github.com/pointcloudAI/libPointCloud/wiki).
 
 and [Documents](https://github.com/oak3dvision/oaksdk/tree/master/doc).
 
 ## Support
 
-Check or raise issue on
-[Issue tracking](https://github.com/oak3dvision/oaksdk/issues)
- 
+Check or raise issue on [Issue tracking](https://github.com/oak3dvision/oaksdk/issues)
+
 We will reply you asap.

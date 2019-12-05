@@ -15,9 +15,17 @@
 #include "Timer.h"
 #include "Configuration.h"
 
+#define SPEED_OF_LIGHT 299792458.0
 #define BULK_XFER_EXTRA_SIZE  255
 #define EBD_RAW12_DATA_LENGTH 396
 #define EBD_INT16_DATA_LENGTH 528
+
+#define UNAMBIGUOUS_RANGE "unambiguous_range"
+#define NEAR_DISTANCE "near_distance"
+#define MEASURE_MODE "measure_mode"
+#define FILTER_EN "filter_en"
+#define INTG_SCALE "intg_scale"
+#define INTG_TIME "intg_time"
 
 #define CALIB_SECT_LENS "lens"
 #define CALIB_SECT_LENS_ID 0
@@ -81,6 +89,7 @@ namespace PointCloud
         virtual bool registerCallback(FrameType type, CallbackType f);
         virtual bool clearAllCallbacks();
         virtual bool clearCallback(FrameType type);
+         bool isRawDataProvidedOnly();
 
         virtual bool registerPowerSupplierChangedCallback(PowerChangedCallback f);
         virtual bool setPowerLevel(int level) =0;
