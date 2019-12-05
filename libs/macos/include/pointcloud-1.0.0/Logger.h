@@ -87,7 +87,9 @@ protected:
   
 public:
   Logger(LogLevel loglevel = LOG_ERROR): _logLevel(loglevel), _currentLogLevel(loglevel)
-  {}
+  {
+      _outputStreams.clear();
+  }
   
   Logger &operator =(const Logger &other) { _logLevel = other._logLevel; _currentLogLevel = other._currentLogLevel; return *this; }
   

@@ -767,14 +767,14 @@ typedef PointCloudFrameTemplate<IntensityPoint> XYZIPointCloudFrame;
 
 typedef Ptr<XYZPointCloudFrame> XYZPointCloudFramePtr;
 
-//#if defined(WINDOWS)
+#if defined(WINDOWS)
 //fixed  error LNK2019 and  error LNK2001 can't find symbol in windows platform
 //coz template class can't export symbol in header file
 template class POINTCLOUD_EXPORT PointCloudFrameTemplate<Point>;
 template class POINTCLOUD_EXPORT PointCloudFrameTemplate<IntensityPoint>;
 template class POINTCLOUD_EXPORT ToFRawFrameTemplate<uint16_t, uint8_t>;
 template class POINTCLOUD_EXPORT ToFRawIQFrameTemplate<int16_t>;
-//#endif
+#endif
 /**
  * @}
  */

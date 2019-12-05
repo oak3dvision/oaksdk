@@ -9,7 +9,7 @@
 
 #include "Common.h"
 #include "DataPacket.h"
-//#include "HardwareSerializer.h"
+#include "HardwareSerializer.h"
 
 #define FILE_PREFIX "file:"
 
@@ -210,7 +210,7 @@ public:
   bool remove(const String &section, const String &name);
   bool removeSection(const String &section);
   
-  virtual bool getConfigSet(const String &section, const ConfigSet *&configSet, bool includeParent = true) const;
+  virtual bool getConfigSet(const String &section,  ConfigSet *&configSet, bool includeParent = true) ;
   
   virtual bool read(const String &configFile);
   virtual bool read(InputStream &in);
@@ -327,6 +327,7 @@ struct CalibrationInformation
 class POINTCLOUD_EXPORT MainConfigurationFile: public ConfigurationFile
 {
 protected:
+  Version _version;
   Map<int, ConfigurationFile> _cameraProfiles;
   Map<int, String> _cameraProfileNames;
   int _defaultCameraProfileID, _defaultCameraProfileIDInHardware;
@@ -341,7 +342,7 @@ protected:
 
   bool _saveHardwareImage(Version &version, TimeStampType &timestamp, SerializedObject &so);
   
-  //HardwareSerializerPtr _hardwareSerializer;
+  HardwareSerializerPtr _hardwareSerializer;
   
   int _quantizationFactor;
   
@@ -352,35 +353,42 @@ protected:
   bool _rollbackCameraProfiles(const Vector<int> &newIDsAdded, const Vector<ConfigurationFile> &oldIDsModified);
     
 public:
-  MainConfigurationFile(const String &name, const String &hardwareID, int quantizationFactor = 4/*, HardwareSerializerPtr hardwareSerializer = nullptr*/): 
-  _currentCameraProfile(nullptr), _defaultCameraProfileID(-1), _defaultCameraProfileIDInHardware(-1), _mainConfigName(name), /*_hardwareSerializer(hardwareSerializer),*/
+  MainConfigurationFile(const String &name, const String &hardwareID, int quantizationFactor = 4, HardwareSerializerPtr hardwareSerializer = nullptr):
+    _defaultCameraProfileID(-1),_defaultCameraProfileIDInHardware(-1),_currentCameraProfile(nullptr), _mainConfigName(name),_hardwareID(hardwareID), _hardwareSerializer(hardwareSerializer),
   _quantizationFactor(quantizationFactor)
   {
-    //if(!hardwareSerializer)
-     // _hardwareSerializer = HardwareSerializerPtr(new HardwareSerializer());
+      
+      _version.major = 1;
+      _version.minor = 0;
+      TimeStampType timestamp = 0;
+    if(!_hardwareSerializer)
+      _hardwareSerializer = HardwareSerializerPtr(new HardwareSerializer());
   }
   
   void setSerializationQuantizationFactor(int quantizationFactor) { _quantizationFactor = quantizationFactor; }
   
   virtual bool read(const String &configFile);
-  
+    Version getVersion(){ return _version;};
   bool readFromHardware();
+  bool ValidateBinFromEEPROM(String serialID = "");
+  bool writeSerialToEEPROM(String serialID = "");
+  bool writeToConfFile(std::string& file);
   bool writeToHardware();
+  bool writeToBinFile(int profileID);
   
-  inline bool hasHardwareConfigurationSupport() { return false;
-    //_hardwareSerializer && *_hardwareSerializer; 
+  inline bool hasHardwareConfigurationSupport() { return _hardwareSerializer && *_hardwareSerializer;
   }
   
-  //inline void setHardwareConfigSerializer(const HardwareSerializerPtr &hardwareSerializer) { _hardwareSerializer = hardwareSerializer; }
+  inline void setHardwareConfigSerializer(const HardwareSerializerPtr &hardwareSerializer) { _hardwareSerializer = hardwareSerializer; }
   
   virtual String get(const String &section, const String &name) const;
   virtual bool isPresent(const String &section, const String &name, bool includeParent = true) const;
   
   int addCameraProfile(const String &profileName, const int parentID = -1);
   bool setCurrentCameraProfile(const int id);
-  bool removeAllHardwareCameraProfiles();
+  bool removeAllHardwareCameraProfiles(bool eraseHardware = true);
   bool removeCameraProfile(const int id);
-  bool saveCameraProfileToHardware(int &id, bool saveParents = false, bool setAsDefault = false, const String &namePrefix = "");
+  bool saveCameraProfileToHardware(int &id, bool saveParents = false, bool setAsDefault = false, const String &namePrefix = "",bool updateHardware = true );
   
   ConfigurationFile *getDefaultCameraProfile();
   ConfigurationFile *getCameraProfile(const int id);

@@ -15,9 +15,17 @@
 #include "Timer.h"
 #include "Configuration.h"
 
+#define SPEED_OF_LIGHT 299792458.0
 #define BULK_XFER_EXTRA_SIZE  255
 #define EBD_RAW12_DATA_LENGTH 396
 #define EBD_INT16_DATA_LENGTH 528
+
+#define UNAMBIGUOUS_RANGE "unambiguous_range"
+#define NEAR_DISTANCE "near_distance"
+#define MEASURE_MODE "measure_mode"
+#define FILTER_EN "filter_en"
+#define INTG_SCALE "intg_scale"
+#define INTG_TIME "intg_time"
 
 #define CALIB_SECT_LENS "lens"
 #define CALIB_SECT_LENS_ID 0
@@ -62,6 +70,7 @@ namespace PointCloud
         FRAME_TYPE_COUNT = 4 // This is just used for number of callback types
       };
       typedef Function<void (DepthCamera &camera, const Frame &frame, FrameType callBackType)> CallbackType;
+      typedef Function<void (DepthCamera &camera, int isOn12V)> PowerChangedCallback;
     public:
         DepthCamera(const String &name, const String &chipset, DevicePtr device);
         virtual ~DepthCamera();
@@ -80,6 +89,10 @@ namespace PointCloud
         virtual bool registerCallback(FrameType type, CallbackType f);
         virtual bool clearAllCallbacks();
         virtual bool clearCallback(FrameType type);
+         bool isRawDataProvidedOnly();
+
+        virtual bool registerPowerSupplierChangedCallback(PowerChangedCallback f);
+        virtual bool setPowerLevel(int level) =0;
         
         bool setFrameRate(const FrameRate &r);
         bool getFrameRate(FrameRate &r) const;
@@ -150,13 +163,17 @@ namespace PointCloud
         int  addCameraProfile(const String &profileName, const int parentID);
         bool setCameraProfile(const int id, bool softApply = false);
         bool removeCameraProfile(const int id);
-        /*
+
+        virtual bool _onPowerChangedCallback(int isOn12V);
+        
+
         inline bool saveCameraProfileToHardware(int &id, bool saveParents = false, bool setAsDefault = false, const String &namePrefix = "") { return configFile.saveCameraProfileToHardware(id, saveParents, setAsDefault, namePrefix); }
-        */
+        
     protected:
           bool _addParameters(const Vector<ParameterPtr> &params);
           // Callback the registered function for 'type' if present and decide whether continue processing or not
           virtual bool _callbackAndContinue(uint32_t &callBackTypesToBeCalled, FrameType type, const Frame &frame);
+        
         
           bool _init();
           virtual bool _start() = 0;
@@ -230,6 +247,7 @@ namespace PointCloud
         FrameStreamWriterPtr _frameStreamWriter;
         
         CallbackType _callback[FRAME_TYPE_COUNT];
+        PowerChangedCallback _powerChangedCallback;
         
         uint32_t _callBackTypesRegistered = 0;
         ThreadPtr _captureThread = 0;

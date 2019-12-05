@@ -458,7 +458,7 @@ public:
  * @}
  */
 
-//#if defined(WINDOWS)
+#if defined(WINDOWS)
   //fixed  error LNK2019 and  error LNK2001 can't find symbol in windows platform
   //coz template class can't export symbol in header file
   template class POINTCLOUD_EXPORT  ParameterTemplate<bool>;
@@ -470,7 +470,7 @@ public:
   template class POINTCLOUD_EXPORT RangeParameterTemplate<int>;
   template class POINTCLOUD_EXPORT RangeParameterTemplate<float>;
   template class POINTCLOUD_EXPORT RangeParameterTemplate<uint>;
-//#endif
+#endif
 
 }
 
