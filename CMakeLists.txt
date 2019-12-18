@@ -34,7 +34,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
      set(COMMON_INCLUDE
       /usr/include/libusb-1.0
       ./include/
-      ./libs/macos/include/pointcloud-1.0.0/
+      ./libs/ubuntu/include/pointcloud-1.0.0/
   )
     set(PointCloud ./libs/ubuntu/lib)
     endif()
@@ -75,8 +75,6 @@ set(CPACK_PACKAGE_VENDOR "pointcloud.ai")
 set(CPACK_SOURCE_GENERATOR "Developer")
 
 #add_subdirectory(examples/DepthGesture)
-#add_subdirectory(examples/DepthMeasure)
+add_subdirectory(examples/DepthMeasure)
 add_subdirectory(examples/ExtractRawData)
 #add_subdirectory(examples/DepthAscii)
-#add_subdirectory(examples/hand_tracking)
-#add_subdirectory(examples/touchless_tracking)
