@@ -67,14 +67,13 @@ include_directories(${COMMON_INCLUDE})
 link_directories("/usr/local/lib" ${COMMON_LIBS} ${PointCloud})
 
 #### Packaging related information -- common to both platforms
-set(CPACK_PACKAGE_NAME "Depth Eye SDK")
+set(CPACK_PACKAGE_NAME "Oak3DVision SDK")
 set(CPACK_PACKAGE_VERSION "0.1")
-set(CPACK_PACKAGE_CONTACT "Developer@pointcloud.ai")
 set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
-set(CPACK_PACKAGE_VENDOR "pointcloud.ai")
+set(CPACK_PACKAGE_VENDOR "Oak3DVision")
 set(CPACK_SOURCE_GENERATOR "Developer")
+
 
 #add_subdirectory(examples/DepthGesture)
 add_subdirectory(examples/DepthMeasure)
 add_subdirectory(examples/ExtractRawData)
-#add_subdirectory(examples/DepthAscii)
