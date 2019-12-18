@@ -49,11 +49,7 @@ int main(int argc,char *argv[]) {
         return 1;
     }
 
-    frameSize = PointCloud.FrameSize()
-    frameSize.height = 240
-    frameSize.width = 320
-     depthCamera.setFrameSize(frameSize)
-
+    
       FrameRate r;
       if(depthCamera->getFrameRate(r))
         logger(LOG_INFO) << " ||| Capturing at a frame rate of " << r.getFrameRate() << " fps" << std::endl;
