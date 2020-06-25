@@ -110,7 +110,7 @@ Plug the module and run it.
 
 ## Wiki
 
-Learn more to use libPointCloud at our [wiki](https://github.com/pointcloudAI/libPointCloud/wiki).
+Learn more to use the SDK at our [wiki](https://github.com/oak3dvision/oaksdk/wiki).
 
 and [Documents](https://github.com/oak3dvision/oaksdk/tree/master/doc).
 
